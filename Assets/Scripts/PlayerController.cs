@@ -56,6 +56,9 @@ public class PlayerController : MonoBehaviour
         //rb.AddForce(movement * speed);
 
         //velocidade sem acelaração (estilo rpg)
+
+        //rb.position = new Vector3(3f, 20f, 3f);
+
         rb.velocity = movement * speed;
 
     }
