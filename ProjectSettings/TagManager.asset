@@ -6,6 +6,8 @@ TagManager:
   tags:
   - piano
   - teclapiano
+  - cadeado
+  - porta
   layers:
   - Default
   - TransparentFX

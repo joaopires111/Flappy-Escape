@@ -10,14 +10,23 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public GameObject pianoPanel;
     public GameObject clicah;
+    public GameObject desbloquear;
     public GameObject Nota335;
+    public GameObject porta;
+    public GameObject cadeadoObj;
+
+    public GameObject quadro1;
+    public GameObject quadro2;
 
     private float movementX;
     private float movementZ;
 
+    private int quadro;
+
     private Rigidbody rb;
     private int acertadas;
     private bool entrouarea;
+    private bool entrouareacadeado;
 
     ArrayList Resultado = new ArrayList();
 
@@ -25,18 +34,43 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         acertadas = 0;
-        Resultado.Add(3);
-        Resultado.Add(3);
-        Resultado.Add(5);
 
         entrouarea = false;
+        entrouareacadeado = false;
         // Assign the Rigidbody component to our private rb variable
         rb = GetComponent<Rigidbody>();
 
         // Mete painel do piano a falso quando começa
         pianoPanel.SetActive(false);
         clicah.SetActive(false);
+        desbloquear.SetActive(false);
         Nota335.SetActive(false);
+        cadeadoObj.SetActive(true);
+        quadro1.SetActive(false);
+        quadro2.SetActive(false);
+
+        quadro = Random.Range(1, 3);
+        switch (quadro)
+        {
+            case 1:
+                Resultado.Add(3);
+                Resultado.Add(3);
+                Resultado.Add(5);
+                quadro1.SetActive(true);
+                quadro2.SetActive(false);
+                break;
+            case 2:
+                Resultado.Add(1);
+                Resultado.Add(2);
+                Resultado.Add(3);
+                quadro1.SetActive(false);
+                quadro2.SetActive(true);
+                break;
+            default:
+                quadro1.SetActive(true);
+                quadro2.SetActive(false);
+                break;
+        }
     }
 
     void OnGUI()
@@ -44,6 +78,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown("e") && entrouarea == true)
         {
             pianoPanel.SetActive(true);
+        }
+        if (Input.GetKeyDown("e") && entrouareacadeado == true && acertadas == 3)
+        {
+            desbloquear.SetActive(false);
+            cadeadoObj.SetActive(false);
+            porta.transform.Rotate(0f, 10f, 0f);
         }
     }
 
@@ -70,7 +110,11 @@ public class PlayerController : MonoBehaviour
             //Abre painel do piano
             clicah.SetActive(true);
             entrouarea = true;
-
+        }
+        if (other.gameObject.CompareTag("cadeado"))
+        {
+            desbloquear.SetActive(true);
+            entrouareacadeado = true;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -80,6 +124,12 @@ public class PlayerController : MonoBehaviour
         {
             pianoPanel.SetActive(false);
             clicah.SetActive(false);
+            entrouarea = false;
+        }
+        if (other.gameObject.CompareTag("cadeado"))
+        {
+            desbloquear.SetActive(false);
+            entrouareacadeado = false;
         }
     }
 
