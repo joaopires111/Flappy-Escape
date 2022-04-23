@@ -12,8 +12,19 @@ public class PlayerController : MonoBehaviour
     public GameObject clicah;
     public GameObject desbloquear;
     public GameObject Nota335;
+
+
+    // Porta masmorra
+    public GameObject cadeadoMasmorra;
+    public GameObject abrirPorta2TXT;
+    public GameObject portamasmorra;
+
     public GameObject porta;
     public GameObject cadeadoObj;
+    public GameObject chave1;
+    private bool apanhouchave1;
+    public GameObject chaveIncorreta;
+    public GameObject apanharChaveTXT;
 
     public GameObject quadro1;
     public GameObject quadro2;
@@ -25,8 +36,11 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
     private int acertadas;
+
     private bool entrouarea;
     private bool entrouareacadeado;
+    private bool entrouareachave;
+    private bool entrouareaporta2;
 
     ArrayList Resultado = new ArrayList();
 
@@ -37,6 +51,10 @@ public class PlayerController : MonoBehaviour
 
         entrouarea = false;
         entrouareacadeado = false;
+        entrouareachave = false;
+
+        apanhouchave1 = false;
+
         // Assign the Rigidbody component to our private rb variable
         rb = GetComponent<Rigidbody>();
 
@@ -44,10 +62,18 @@ public class PlayerController : MonoBehaviour
         pianoPanel.SetActive(false);
         clicah.SetActive(false);
         desbloquear.SetActive(false);
+        chaveIncorreta.SetActive(false);
         Nota335.SetActive(false);
         cadeadoObj.SetActive(true);
         quadro1.SetActive(false);
         quadro2.SetActive(false);
+        chave1.SetActive(true);
+        apanharChaveTXT.SetActive(false);
+
+        // Porta masmorra
+        cadeadoMasmorra.SetActive(true);
+        abrirPorta2TXT.SetActive(false);
+        entrouareaporta2 = false;
 
         quadro = Random.Range(1, 3);
         switch (quadro)
@@ -79,11 +105,34 @@ public class PlayerController : MonoBehaviour
         {
             pianoPanel.SetActive(true);
         }
-        if (Input.GetKeyDown("e") && entrouareacadeado == true && acertadas == 3)
+        if (Input.GetKeyDown("e") && entrouareacadeado == true)
         {
-            desbloquear.SetActive(false);
-            cadeadoObj.SetActive(false);
-            porta.transform.Rotate(0f, 10f, 0f);
+            if (apanhouchave1)
+            {
+                desbloquear.SetActive(false);
+                entrouareacadeado = false;
+                chaveIncorreta.SetActive(false);
+                cadeadoObj.SetActive(false);
+                porta.transform.Rotate(0f, 90f, 0f);
+            } 
+            if (apanhouchave1 == false)
+            {
+                desbloquear.SetActive(false);
+                chaveIncorreta.SetActive(true);
+            }
+        }
+        if (Input.GetKeyDown("e") && entrouareachave == true)
+        {
+            apanharChaveTXT.SetActive(false);
+            chave1.SetActive(false);
+            apanhouchave1 = true;
+        }
+        if (Input.GetKeyDown("e") && entrouareaporta2 == true)
+        {
+            abrirPorta2TXT.SetActive(false);
+            entrouareaporta2 = false;
+            cadeadoMasmorra.SetActive(false);
+            portamasmorra.transform.Rotate(0f, 90f, 0f);
         }
     }
 
@@ -116,6 +165,16 @@ public class PlayerController : MonoBehaviour
             desbloquear.SetActive(true);
             entrouareacadeado = true;
         }
+        if (other.gameObject.CompareTag("chave"))
+        {
+            apanharChaveTXT.SetActive(true);
+            entrouareachave = true;
+        }
+        if (other.gameObject.CompareTag("cadeadomasmorra"))
+        {
+            abrirPorta2TXT.SetActive(true);
+            entrouareaporta2 = true;
+        }
     }
     private void OnTriggerExit(Collider other)
     {
@@ -129,7 +188,18 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("cadeado"))
         {
             desbloquear.SetActive(false);
+            chaveIncorreta.SetActive(false);
             entrouareacadeado = false;
+        }
+        if (other.gameObject.CompareTag("chave"))
+        {
+            apanharChaveTXT.SetActive(false);
+            entrouareachave = false;
+        }
+        if (other.gameObject.CompareTag("cadeadomasmorra"))
+        {
+            abrirPorta2TXT.SetActive(false);
+            entrouareaporta2 = false;
         }
     }
 

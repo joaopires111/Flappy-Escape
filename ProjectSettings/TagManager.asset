@@ -8,6 +8,9 @@ TagManager:
   - teclapiano
   - cadeado
   - porta
+  - chave
+  - portamasmorra
+  - cadeadomasmorra
   layers:
   - Default
   - TransparentFX
